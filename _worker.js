@@ -844,7 +844,7 @@ function detectClient(userAgent) {
 		return "clash";
 	} else if (userAgent.includes('sing-box') || userAgent.includes('singbox')) {
 		return "singbox";
-	} else if (userAgent.includes('Surfboard')) {
+	} else if (userAgent.includes('surfboard')) {
 		return "surfboard";
 	}
 	return "";

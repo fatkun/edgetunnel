@@ -66,7 +66,8 @@ export default {
 				case '/':
 					return new Response(JSON.stringify(request.cf), { status: 200 });
 				case `/${userID}`: {
-					const vlessConfig = await getVLESSConfig(userID, request.headers.get('Host'), sub, userAgent, RproxyIP);
+					const actualSub = url.searchParams.get("sub") || sub;
+					const vlessConfig = await getVLESSConfig(userID, request.headers.get('Host'), actualSub, userAgent, RproxyIP);
 					const now = Date.now();
 					const timestamp = Math.floor(now / 1000);
 					const expire = 4102329600;//2099-12-31
@@ -844,8 +845,6 @@ function detectClient(userAgent) {
 		return "clash";
 	} else if (userAgent.includes('sing-box') || userAgent.includes('singbox')) {
 		return "singbox";
-	} else if (userAgent.includes('surfboard')) {
-		return "surfboard";
 	}
 	return "";
 }
@@ -947,7 +946,6 @@ async function getVLESSConfig(userID, hostName, sub, userAgent, RproxyIP) {
 		let url = "";
 		let isBase64 = false;
 		let client = detectClient(userAgent);
-
 		if (client != "") {
 			url = `https://${subconverter}/sub?target=${client}&url=https%3A%2F%2F${sub}%2Fsub%3Fhost%3D${fakeHostName}%26uuid%3D${fakeUserID}%26edgetunnel%3Dcmliu%26proxyip%3D${RproxyIP}&insert=false&config=${encodeURIComponent(subconfig)}&emoji=true&list=false&tfo=false&scv=true&fdn=false&sort=false&new_name=true`;
 		} else {
